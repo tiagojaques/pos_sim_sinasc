@@ -1,0 +1,10 @@
+# .gitignore
+.env
+./logs/*
+./data/*
+logs/
+data/
+*teste*
+__pycache__/
+*.csv
+*.parquet
