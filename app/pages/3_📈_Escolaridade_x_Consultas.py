@@ -17,8 +17,6 @@ st.title("Avaliação entre escolaridade e numero de consulta pré-natais - Open
 st.markdown("""
     ##### **Objetivo:**
             Avaliar a relação entre a escolaridade da mãe e o número de consultas pré-natais realizadas.
-    ##### **Visualização:** 
-            Um box plot ou gráfico de barras agrupadas pode ser utilizado para representar a distribuição do número de consultas pré-natais por diferentes níveis de escolaridade.
     ##### **Insight:** 
             Fornecer insights sobre possíveis disparidades no acesso ao atendimento pré-natal, o que pode influenciar a saúde materno-infantil.
 """)

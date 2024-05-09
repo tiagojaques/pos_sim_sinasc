@@ -13,6 +13,8 @@ def atualizacao_tabelas_auxiliares():
     import os
 
     save_path = '/opt/airflow/data/gold/auxiliares'
+    bronze_path = '/opt/airflow/data/bronze/'
+    auxiliares_path = '/opt/airflow/data/gold/auxiliares/'
     os.makedirs(save_path, exist_ok=True)
 
     def create_and_save_auxiliary(df_dict, filename, save_path): 
@@ -155,6 +157,68 @@ def atualizacao_tabelas_auxiliares():
 
     stdoepidem_dict = {'Codigo': [1, 0], 'Descricao': ['Sim', 'Não']}
     create_and_save_auxiliary(stdoepidem_dict, 'stdoepidem', save_path)
+
+    colunas = ['CO_CNES','CO_UNIDADE','CO_UF','CO_IBGE','NU_CNPJ_MANTENEDORA',
+            'NO_FANTASIA','CO_NATUREZA_ORGANIZACAO','DS_NATUREZA_ORGANIZACAO',
+            'CO_NATUREZA_JUR','ST_CENTRO_CIRURGICO','ST_CENTRO_OBSTETRICO',
+            'ST_CENTRO_NEONATAL','ST_ATEND_HOSPITALAR','ST_SERVICO_APOIO','ST_ATEND_AMBULATORIAL'
+    ]
+
+    cnes_df = pd.read_csv(bronze_path+'cnes_estabelecimentos.csv', sep=';', encoding='latin1', dtype='str', usecols=colunas)
+    cnes_df.to_parquet(auxiliares_path+'cnes_estabelecimentos.parquet', index=False)
+
+    municipio_df = pd.read_excel(bronze_path + 'RELATORIO_DTB_BRASIL_MUNICIPIO.xls', dtype=str )
+    municipio_df = municipio_df[['UF','Nome_UF','Município','Código Município Completo','Nome_Município']].drop_duplicates()
+    municipio_df.columns = ['uf','nome_uf','codigo_municipio','codigo_municipio_completo','nome_municipio']
+    municipio_df.to_parquet(auxiliares_path + 'municipio.parquet', index=False)
+
+    print('Município processado com sucesso!')
+
+    uf_df = municipio_df[['uf','nome_uf']].drop_duplicates()
+    uf_df.to_parquet(auxiliares_path + 'uf.parquet', index=False)
+
+    print('UF processado com sucesso!')
+
+    print('Criando tabela CID10')
+    # Ler csv da CID10 no diretorio bronze
+    #seleciona apenas as colunas 'CATINI', 'CATFIM', 'DESCRICAO'
+    cid10_grupo_df = pd.read_csv(bronze_path + 'CID-10-GRUPOS.CSV', sep=';', encoding='latin1', usecols=['CATINIC', 'CATFIM', 'DESCRICAO'])
+    cid10_grupo_df.rename(columns={'DESCRICAO': 'DESCRICAO_GRP', 'CATINIC': 'CATINI'}, inplace=True)
+
+    cid10_cat_df = pd.read_csv(bronze_path + 'CID-10-CATEGORIAS.CSV', sep=';', encoding='latin1', usecols=['CAT', 'DESCRICAO'])
+    cid10_cat_df.rename(columns={'DESCRICAO': 'DESCRICAO_CAT'}, inplace=True)
+
+    cid10_subcat = pd.read_csv(bronze_path + 'CID-10-SUBCATEGORIAS.CSV', sep=';', encoding='latin1', usecols=['SUBCAT', 'DESCRICAO'])
+    cid10_subcat.rename(columns={'DESCRICAO': 'DESCRICAO_SUBCAT'}, inplace=True)
+    # Criar a coluna CAT no dataframe cid10_subcat pegando os 3 primeiros digitos da coluna SUBCAT
+    cid10_subcat['CAT'] = cid10_subcat['SUBCAT'].str[:3]
+
+    # Adicionando a coluna de grupo às categorias usando um mapeamento manual baseado nos intervalos fornecidos
+    def assign_group_code(cat):
+        for _, row in cid10_grupo_df.iterrows():
+            if row['CATINI'] <= cat <= row['CATFIM']:
+                return row['CATINI']
+        return None
+
+    cid10_cat_df['CATINI'] = cid10_cat_df['CAT'].apply(assign_group_code)
+
+    # Mesclando a tabela de categorias com a tabela de grupos
+    cid10_cat_df = pd.merge(
+        cid10_cat_df,
+        cid10_grupo_df,
+        how="left",
+        on="CATINI"
+    )
+
+    # Mesclando a tabela de subcategorias com as categorias
+    final_df = pd.merge(
+        cid10_subcat,
+        cid10_cat_df,
+        how="left",
+        on="CAT"
+    )
+
+    final_df.to_parquet(auxiliares_path + 'cid10.parquet', index=False)
 
 default_args = {
     'owner': 'airflow',

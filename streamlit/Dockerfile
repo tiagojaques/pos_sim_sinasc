@@ -8,4 +8,4 @@ RUN pip install streamlit pandas pyarrow plotly.express dask[complete]
 COPY config.toml /root/.streamlit/config.toml
 
 # Definindo o comando padrão como iniciar o Streamlit
-CMD ["streamlit", "run", "/app/ms_analises.py"]
+CMD ["streamlit", "run", "/app/🏠_Home.py"]

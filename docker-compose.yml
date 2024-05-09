@@ -22,7 +22,7 @@ services:
       - "5432:5432"
   webserver:
     container_name: airflow_webserver
-    image: apache/airflow:2.9.0
+    image: airflow_ms:lastest
     environment:
       - LOAD_EX=n
       - EXECUTOR=Local
@@ -47,7 +47,7 @@ services:
 
   scheduler:
     container_name: airflow_scheduler
-    image: apache/airflow:2.9.0
+    image: airflow_ms:lastest
     environment:
       - LOAD_EX=n
       - EXECUTOR=Local

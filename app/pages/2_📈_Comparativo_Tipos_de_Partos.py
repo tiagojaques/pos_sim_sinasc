@@ -17,8 +17,6 @@ st.title("Comparativo Tipos de Parto ao longo dos anos- OpenDatasus")
 st.markdown("""
     ##### **Objetivo:**
             Mostrar a proporção de partos normais, cesáreos e ignorados ao longo dos anos.
-    ##### **Visualização:** 
-            Um gráfico de barras empilhadas pode mostrar como as tendências de tipos de parto mudam com o tempo.
     ##### **Insight:** 
             Ajudar a identificar possíveis variações nos métodos de parto, como aumento de cesarianas ou mudança de práticas médicas.
 """)
