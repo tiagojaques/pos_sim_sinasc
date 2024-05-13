@@ -41,7 +41,7 @@ def atualizacao_tabelas_auxiliares():
     consultas_dict = {'Codigo': [1, 2, 3, 4, 9], 'Descricao': ['Nenhuma', 'de 1 a 3', 'de 4 a 6', '7 e mais', 'Ignorado']}
     create_and_save_auxiliary(consultas_dict, 'consultas', save_path)
 
-    sexo_dict = {'Codigo': [1, 2, 0], 'Descricao': ['M – Masculino', 'F – Feminino', 'I – Ignorado']}
+    sexo_dict = {'Codigo': [1, 2, 0], 'Descricao': ['Masculino', 'Feminino', 'Ignorado']}
     create_and_save_auxiliary(sexo_dict, 'sexo', save_path)
 
     racacor_dict = {'Codigo': [1, 2, 3, 4, 5], 'Descricao': ['Branca', 'Preta', 'Amarela', 'Parda', 'Indígena']}
@@ -157,6 +157,9 @@ def atualizacao_tabelas_auxiliares():
 
     stdoepidem_dict = {'Codigo': [1, 0], 'Descricao': ['Sim', 'Não']}
     create_and_save_auxiliary(stdoepidem_dict, 'stdoepidem', save_path)
+
+    locnasc_dic = {'Codigo': [1, 2, 3, 4, 5], 'Descricao': ['Hospital', 'Outros estabelecimentos de saúde', 'Domicílio', 'Outros', 'Aldeia indígena']}
+    create_and_save_auxiliary(locnasc_dic, 'locnasc', save_path)
 
     colunas = ['CO_CNES','CO_UNIDADE','CO_UF','CO_IBGE','NU_CNPJ_MANTENEDORA',
             'NO_FANTASIA','CO_NATUREZA_ORGANIZACAO','DS_NATUREZA_ORGANIZACAO',

@@ -22,6 +22,14 @@ def sim_4_limpeza_dados():
                                 'DTCONCASO','FONTESINF','ALTCAUSA','DTINVESTIG'])
     print('Colunas removidas')
     sim_df['ANOOBITO'] = sim_df['DTOBITO'].str[4:8]
+    sim_df = sim_df.dropna(subset=['ANOOBITO'])
+    # Mudar os valores do ANOOBITO se tiver apenas 2 digitos para 4 dígitos (96,97,98,99)
+    sim_df = sim_df[sim_df['ANOOBITO'] != '']
+    sim_df = sim_df[sim_df['ANOOBITO'] != '00']
+        
+    sim_df['ANOOBITO'] = sim_df['ANOOBITO'].apply(lambda x: '19'+x if len(x) == 2 else x, meta=(None, 'str'))
+    #remover valores invalidos de ANOOBITO
+
     columns_to_convert = ['DTOBITO','DTCADASTRO','DTNASC','DTRECEBIM']
     print (sim_df.columns)
     for col in columns_to_convert:
