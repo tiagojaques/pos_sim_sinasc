@@ -1,4 +1,4 @@
-# Big Data em Saúde Pública: Ferramentas para Transformação dos Dados do SIM e SINASC em Insights
+# Análise de Dados em Saúde Pública: Ferramentas para Transformação dos Dados do SIM e SINASC em Insights
 
 ## Sobre o Projeto
 
