@@ -5,7 +5,7 @@ import dask.dataframe as dd
 import os
 
 st.set_page_config(
-    page_title="Tabelas Auxiliares", 
+    page_title="Dashboard dinâmico - OpenDatasus 📊", 
     page_icon=":bar_chart:",
     layout="wide")
 
@@ -131,4 +131,4 @@ if base_principal or base_principal != "":
         if len(df_aux.index) != 0:
             st.write(df_aux.head(1000), use_container_width=True )
         else:
-            st.write(df.head(1000), use_container_width=True )
+            st.write(df.head(1000), use_container_width=True ) 
